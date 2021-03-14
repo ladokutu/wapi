@@ -1,4 +1,4 @@
-# Whatsapp API Tutorial
+# Whatsapp API Tutorial  By NGEKODING Info Lebih Lengkap di <a href="https://github.com/ngekoding"> Ngekoding </a>
 
 Hi, this is the implementation example of <a href="https://github.com/pedroslopez/whatsapp-web.js">whatsapp-web.js</a>
 
