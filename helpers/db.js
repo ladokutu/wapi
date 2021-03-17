@@ -10,6 +10,14 @@ const client = new Client({
 
 client.connect();
 
+
+const getReply = async (keyword) => {
+  const connection = await client();
+  const [rows] = await connection.execute('SELECT message FROM wa_replies WHERE keyword = ?', [keyword]);
+  if (rows.length > 0) return rows[0].message;
+  return false;
+}
+
 const readSession = async () => {
   try {
     const res = await client.query('SELECT * FROM wa_sessions ORDER BY createdate DESC LIMIT 1');
@@ -40,16 +48,12 @@ const removeSession = () => {
   });
 }
 
-const getReply = async (keyword) => {
-  const [rows] = await client.execute('SELECT message FROM wa_replies WHERE keyword = ?', [keyword]);
-  if (rows.length > 0) return rows[0].message;
-  return false;
-}
+
 
 
 module.exports = {
+  getReply,
   readSession,
   saveSession,
-  removeSession,
-  getReply
+  removeSession
 }
