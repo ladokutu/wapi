@@ -49,13 +49,17 @@ const db = require('./helpers/db.js');
     session: savedSession
   });
   
-  client.on('message', async msg => {
-  const keyword = msg.body.toLowerCase();
-  const replyMessage = await db.getReply(keyword);
-
+  
+	client.on('message', async msg => {
+	  const keyword = msg.body.toLowerCase();
+	  const replyMessage = await db.getReply(keyword);
+	  
+	  
 	  if (replyMessage !== false) {
 		msg.reply(replyMessage);
-	  } else if (msg.body == '!groups') {
+	  }else if (replyMessage == false) {
+		 msg.reply('pesan Tidak Ada'); 
+	  }else if (msg.body == '!groups') {
 		client.getChats().then(chats => {
 		  const groups = chats.filter(chat => chat.isGroup);
 

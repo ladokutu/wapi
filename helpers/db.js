@@ -3,6 +3,7 @@ const { Client } = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
+  //connectionString: "postgres://vzdgvkaidoconw:e31767ba71640aa4c687d50ad30c0871a32cfe05273d16fe7d8569114a755734@ec2-52-44-31-100.compute-1.amazonaws.com:5432/d11aufp3c5upbc",
   ssl: {
     rejectUnauthorized: false
   }
@@ -12,10 +13,16 @@ client.connect();
 
 
 const getReply = async (keyword) => {
-  const [rows] = await client.query('SELECT message FROM wa_replies WHERE keyword = ?', [keyword]);
-  if (rows.length > 0) return rows[0].message;
-  return false;
+	client.query('SELECT message FROM wa_replies WHERE keyword = $1', [keyword], (err, results) => {
+			if (err) {
+			  console.log(err);
+			}else{
+				console.log(results.rows[0].message);
+				return results.rows[0].message;
+			}
+	})
 }
+
 
 const readSession = async () => {
   try {
