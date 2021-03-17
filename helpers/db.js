@@ -12,8 +12,7 @@ client.connect();
 
 
 const getReply = async (keyword) => {
-  const connection = await client();
-  const [rows] = await connection.execute('SELECT message FROM wa_replies WHERE keyword = ?', [keyword]);
+  const [rows] = await client.execute('SELECT message FROM wa_replies WHERE keyword = ?', [keyword]);
   if (rows.length > 0) return rows[0].message;
   return false;
 }
