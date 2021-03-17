@@ -2,7 +2,7 @@ const { query } = require('express-validator');
 const { Client } = require('pg');
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
+ connectionString: process.env.DATABASE_URL,
    ssl: {
     rejectUnauthorized: false
   }
@@ -18,7 +18,7 @@ const getReply = async (keyword) => {
 				console.log(res.rows[0].message);
 				return res.rows[0].message;
 			}else{
-				var kosong ='Yang ditanyakan g ada bosss';
+				var kosong ='Mohon Ditunggu balasannya, lagi sibuk banget 🙏';
 				return kosong;
 			}
 			
