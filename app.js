@@ -49,28 +49,29 @@ const db = require('./helpers/db.js');
     session: savedSession
   });
   
-  client.on('message', msg => {
-    if (msg.body == '!ping') {
-      msg.reply('pong');
-    } else if (msg.body == 'good morning') {
-      msg.reply('selamat pagi');
-    } else if (msg.body == '!groups') {
-      client.getChats().then(chats => {
-        const groups = chats.filter(chat => chat.isGroup);
-  
-        if (groups.length == 0) {
-          msg.reply('You have no group yet.');
-        } else {
-          let replyMsg = '*YOUR GROUPS*\n\n';
-          groups.forEach((group, i) => {
-            replyMsg += `ID: ${group.id._serialized}\nName: ${group.name}\n\n`;
-          });
-          replyMsg += '_You can use the group id to send a message to the group._'
-          msg.reply(replyMsg);
-        }
-      });
-    }
-  });
+  client.on('message', async msg => {
+  const keyword = msg.body.toLowerCase();
+  const replyMessage = await db.getReply(keyword);
+
+	  if (replyMessage !== false) {
+		msg.reply(replyMessage);
+	  } else if (msg.body == '!groups') {
+		client.getChats().then(chats => {
+		  const groups = chats.filter(chat => chat.isGroup);
+
+		  if (groups.length == 0) {
+			msg.reply('You have no group yet.');
+		  } else {
+			let replyMsg = '*YOUR GROUPS*\n\n';
+			groups.forEach((group, i) => {
+			  replyMsg += `ID: ${group.id._serialized}\nName: ${group.name}\n\n`;
+			});
+			replyMsg += '_You can use the group id to send a message to the group._'
+			msg.reply(replyMsg);
+		  }
+		});
+	  }
+	});
   
   client.initialize();
   

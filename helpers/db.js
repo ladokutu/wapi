@@ -40,8 +40,20 @@ const removeSession = () => {
   });
 }
 
+const getReply = async (keyword) => {
+  try {
+    const res = await client.query('SELECT message FROM wa_replies WHERE keyword = ?', [keyword]);
+    if (res.rows.length > 0) return res.rows[0].message;
+    return '';
+  } catch (err) {
+    throw err;
+  }
+}
+
+
 module.exports = {
   readSession,
   saveSession,
-  removeSession
+  removeSession,
+  getReply
 }
