@@ -3,8 +3,7 @@ const { Client } = require('pg');
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
-  //connectionString: "postgres://vzdgvkaidoconw:e31767ba71640aa4c687d50ad30c0871a32cfe05273d16fe7d8569114a755734@ec2-52-44-31-100.compute-1.amazonaws.com:5432/d11aufp3c5upbc",
-  ssl: {
+   ssl: {
     rejectUnauthorized: false
   }
 });
@@ -13,14 +12,19 @@ client.connect();
 
 
 const getReply = async (keyword) => {
-	client.query('SELECT message FROM wa_replies WHERE keyword = $1', [keyword], (err, results) => {
-			if (err) {
-			  console.log(err);
+	try {
+		const res = await client.query('SELECT message FROM wa_replies WHERE keyword = $1', [keyword]);
+			if (res.rows.length > 0){
+				console.log(res.rows[0].message);
+				return res.rows[0].message;
 			}else{
-				console.log(results.rows[0].message);
-				return results.rows[0].message;
+				var kosong ='Yang ditanyakan g ada bosss';
+				return kosong;
 			}
-	})
+			
+	} 	catch (err) {
+		throw err;
+	}
 }
 
 
